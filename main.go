@@ -20,6 +20,9 @@ var (
 
 	// times is the number of times to re-launch the cmd
 	times = flag.Int("times", 10, "number of times to re-launch the cmd")
+
+	// parallel when true runs the cmd in parallel using goroutines
+	parallel = flag.Bool("parallel", false, "when true runs the cmd in parallel using goroutines")
 )
 
 func init() {
@@ -45,7 +48,11 @@ func main() {
 
 	for i := 0; i < *times; i++ {
 		wg.Add(1)
-		go Launch(cmd, args, i, &wg)
+		if *parallel {
+			go Launch(cmd, args, i, &wg)
+		} else {
+			Launch(cmd, args, i, &wg)
+		}
 	}
 	wg.Wait()
 }
