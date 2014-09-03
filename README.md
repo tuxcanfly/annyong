@@ -12,14 +12,15 @@ usage
 
     annyong <flags> <cmd> <args>
 
-will run the `cmd` with `args` n times in parallel and interrupt each one after
+will run the `cmd` with `args` n times and interrupt each one after
 a random time
 
-to control the times and duration before interrupt, use the following flags
+to control the times and duration before interrupt, use the following flags (defaults indicated)
 
 flags
 =====
 
-    -times=10
-    -minwait=1
-    -maxwait=30
+    -times=10 // number of times to re-launch the cmd
+    -minwait=1 // minimum seconds after before interrupting
+    -maxwait=30 // maximum seconds after before interrupting
+    -parallel=false // when true runs the cmd in parallel using goroutines
