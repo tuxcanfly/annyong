@@ -16,7 +16,7 @@ var (
 	minwait = flag.Int("minwait", 1, "minimum seconds to wait before interrupting")
 
 	// maxwait is the maximum seconds to wait before interrupting
-	maxwait = flag.Int("maxwait", 60, "maximum seconds to wait before interrupting")
+	maxwait = flag.Int("maxwait", 30, "maximum seconds to wait before interrupting")
 
 	// times is the number of times to re-launch the cmd
 	times = flag.Int("times", 10, "number of times to re-launch the cmd")
