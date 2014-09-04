@@ -43,6 +43,10 @@ func main() {
 			break
 		}
 	}
+	if len(os.Args) == i {
+		// all args are flags
+		return
+	}
 	cmd := os.Args[i]
 	args := os.Args[i+1:]
 
