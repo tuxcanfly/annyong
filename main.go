@@ -27,6 +27,7 @@ var (
 
 func init() {
 	flag.Parse()
+	rand.Seed(time.Now().UnixNano())
 }
 
 func main() {
