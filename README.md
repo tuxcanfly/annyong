@@ -24,3 +24,4 @@ flags
     -minwait=1 // minimum seconds after before interrupting
     -maxwait=30 // maximum seconds after before interrupting
     -parallel=false // when true runs the cmd in parallel using goroutines
+    -quit=false // when true stop after receiving the first non-zero return code (unused if -parallel=true)
