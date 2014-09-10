@@ -25,7 +25,7 @@ var (
 	parallel = flag.Bool("parallel", false, "when true runs the cmd in parallel using goroutines")
 
 	// quit when true stop after receiving the first non-zero return code
-	quit = flag.Bool("quit", false, "when true stop after receiving the first non-zero return code")
+	quit = flag.Bool("quit", false, "when true stop after receiving the first non-zero return code (unused if -parallel=true)")
 )
 
 func init() {
