@@ -23,6 +23,9 @@ var (
 
 	// parallel when true runs the cmd in parallel using goroutines
 	parallel = flag.Bool("parallel", false, "when true runs the cmd in parallel using goroutines")
+
+	// quit when true stop after receiving the first non-zero return code
+	quit = flag.Bool("quit", false, "when true stop after receiving the first non-zero return code")
 )
 
 func init() {
@@ -56,7 +59,10 @@ func main() {
 		if *parallel {
 			go Launch(cmd, args, i, &wg)
 		} else {
-			Launch(cmd, args, i, &wg)
+			ok := Launch(cmd, args, i, &wg)
+			if !ok && *quit {
+				return
+			}
 		}
 	}
 	wg.Wait()
@@ -64,7 +70,9 @@ func main() {
 
 // Launch starts the passed exec cmd, sets a random timeout
 // to interrupt and waits for the process to finish
-func Launch(cmd string, args []string, i int, wg *sync.WaitGroup) {
+func Launch(cmd string, args []string, i int, wg *sync.WaitGroup) (success bool) {
+	defer wg.Done()
+
 	c := exec.Command(cmd, args...)
 	c.Stdout = os.Stdout
 	c.Stderr = os.Stderr
@@ -86,6 +94,7 @@ func Launch(cmd string, args []string, i int, wg *sync.WaitGroup) {
 	// goroutine to exit
 	if err := c.Wait(); err != nil {
 		log.Printf("process %v with timeout %v: %v", i, wait, err)
+		return false
 	}
-	wg.Done()
+	return true
 }
