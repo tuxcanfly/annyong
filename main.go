@@ -16,7 +16,7 @@ var (
 	minwait = flag.Int("minwait", 1, "minimum seconds to wait before interrupting")
 
 	// maxwait is the maximum seconds to wait before interrupting
-	maxwait = flag.Int("maxwait", 30, "maximum seconds to wait before interrupting")
+	maxwait = flag.Int("maxwait", 10, "maximum seconds to wait before interrupting")
 
 	// times is the number of times to re-launch the cmd
 	times = flag.Int("times", 10, "number of times to re-launch the cmd")
@@ -25,7 +25,7 @@ var (
 	parallel = flag.Bool("parallel", false, "when true runs the cmd in parallel using goroutines")
 
 	// quit when true stop after receiving the first non-zero return code
-	quit = flag.Bool("quit", false, "when true stop after receiving the first non-zero return code (unused if -parallel=true)")
+	quit = flag.Bool("quit", true, "when true stop after receiving the first non-zero return code (unused if -parallel=true)")
 )
 
 func init() {
