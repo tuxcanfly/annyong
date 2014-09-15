@@ -13,13 +13,13 @@ import (
 
 var (
 	// minwait is the minimum seconds to wait before interrupting
-	minwait = flag.Int("minwait", 1, "minimum seconds to wait before interrupting")
+	minwait = flag.Uint("minwait", 1, "minimum seconds to wait before interrupting")
 
 	// maxwait is the maximum seconds to wait before interrupting
-	maxwait = flag.Int("maxwait", 10, "maximum seconds to wait before interrupting")
+	maxwait = flag.Uint("maxwait", 10, "maximum seconds to wait before interrupting")
 
 	// times is the number of times to re-launch the cmd
-	times = flag.Int("times", 10, "number of times to re-launch the cmd")
+	times = flag.Uint("times", 10, "number of times to re-launch the cmd")
 
 	// parallel when true runs the cmd in parallel using goroutines
 	parallel = flag.Bool("parallel", false, "when true runs the cmd in parallel using goroutines")
@@ -30,6 +30,9 @@ var (
 
 func init() {
 	flag.Parse()
+	if *minwait > *maxwait {
+		log.Fatal("minwait cannot be greater than maxwait")
+	}
 	rand.Seed(time.Now().UnixNano())
 }
 
@@ -54,7 +57,7 @@ func main() {
 	cmd := os.Args[i]
 	args := os.Args[i+1:]
 
-	for i := 0; i < *times; i++ {
+	for i := 0; i < int(*times); i++ {
 		wg.Add(1)
 		if *parallel {
 			go Launch(cmd, args, i, &wg)
@@ -81,7 +84,7 @@ func Launch(cmd string, args []string, i int, wg *sync.WaitGroup) (success bool)
 	}
 
 	// generate random time within minwait to maxwait
-	wait := rand.Int()%(*maxwait-*minwait+1) + *minwait
+	wait := rand.Int()%int(*maxwait-*minwait+1) + int(*minwait)
 	time.AfterFunc(time.Duration(wait)*time.Second, func() {
 		// after random waiting time, send a SIGINT
 		if err := c.Process.Signal(os.Interrupt); err != nil {
