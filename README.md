@@ -21,7 +21,7 @@ flags
 =====
 
     -times=10 // number of times to re-launch the cmd
-    -minwait=1 // minimum seconds after before interrupting
-    -maxwait=10 // maximum seconds after before interrupting
+    -minwait=1 // minimum seconds to wait before interrupting
+    -maxwait=10 // maximum seconds to wait before interrupting
     -parallel=false // when true runs the cmd in parallel using goroutines
     -quit=true // when true stop after receiving the first non-zero return code (unused if -parallel=true)
