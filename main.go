@@ -26,6 +26,9 @@ var (
 
 	// quit when true stop after receiving the first non-zero return code
 	quit = flag.Bool("quit", true, "when true stop after receiving the first non-zero return code (unused if -parallel=true)")
+
+	// verbose logging enabled
+	verbose = flag.Bool("verbose", false, "whether to enable to verbose logging")
 )
 
 func init() {
@@ -71,6 +74,13 @@ func main() {
 	wg.Wait()
 }
 
+// alog logs the given string
+func alog(s string, v ...interface{}) {
+	if *verbose {
+		log.Printf(s, v)
+	}
+}
+
 // Launch starts the passed exec cmd, sets a random timeout
 // to interrupt and waits for the process to finish
 func Launch(cmd string, args []string, i int, wg *sync.WaitGroup) (success bool) {
@@ -88,7 +98,7 @@ func Launch(cmd string, args []string, i int, wg *sync.WaitGroup) (success bool)
 	time.AfterFunc(time.Duration(wait)*time.Second, func() {
 		// after random waiting time, send a SIGINT
 		if err := c.Process.Signal(os.Interrupt); err != nil {
-			log.Printf("%v", err)
+			alog(err.Error())
 		}
 	})
 
@@ -96,7 +106,7 @@ func Launch(cmd string, args []string, i int, wg *sync.WaitGroup) (success bool)
 	// if the process has finished before timeout, allow this
 	// goroutine to exit
 	if err := c.Wait(); err != nil {
-		log.Printf("process %v with timeout %v: %v", i, wait, err)
+		alog("process %v with timeout %v: %v", i, wait, err)
 		return false
 	}
 	return true
